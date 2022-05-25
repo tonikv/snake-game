@@ -1,0 +1,111 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden;
+    background-color: black;
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.container {
+    position: relative;
+    margin: 0 auto;
+    height: 400px;
+    width: 400px;
+}
+
+.title {
+    text-align: center;
+}
+
+.viewport {
+    border: 2px white;
+    background-color: rgb(51, 51, 51);
+    height: 100%;
+    width: 100%;
+}
+
+.scoreDisplay {
+    font-size: larger;
+    color: black;
+    position: absolute;
+    top: 40px;
+    left: 10px;
+}
+
+.menuContainer {
+    font-size: large;
+    color: black;
+    top: 80px;
+    left: 100px;
+    width: 200px;
+    position: absolute;
+    transition: all 0.2s;
+    opacity: 0%
+}
+
+.highscore {
+    height: 200px;
+    text-align: center;
+    display: block;
+    color: white;
+    background-color: rgb(51, 51, 51);
+}
+
+.control-button {
+    border: none;
+    border-radius: 20%;
+    box-shadow: 2px 4px #666;
+}
+
+.arrow-up {
+    grid-area: arrowup;
+}
+
+.arrow-down {
+    grid-area: arrowdown;
+}
+
+.arrow-left {
+    grid-area: arrowleft;
+}
+
+.arrow-right {
+    grid-area: arrowright;
+}
+
+.active-arrow {
+    background-color: green;
+    box-shadow: none;
+}
+
+.controller {
+    background-color: rgb(51, 51, 51);
+    place-self: center;
+    grid-auto-rows: minmax(80px, auto);
+    width: 100%;
+    display: grid;
+    grid-template-areas:
+        '. arrowup .'
+        'arrowleft . arrowright'
+        '. arrowdown .';
+    gap: 1px;
+    padding: 25px;
+}
+
+.animate {
+    opacity: 100%;
+    transition-property: opacity;
+    transition-duration: 2s;
+}
+
+.restartButton {
+    background-color: white;
+    margin-left: 10px;
+    width: 80%;
+    height: 20px;
+}

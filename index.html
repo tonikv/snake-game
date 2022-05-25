@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Snake</title>
+</head>
+<body>
+    <div class= "container" id = "container">
+            <h1 class="title">Snake Game</h1>
+                <canvas class="viewport" id = "canvas"></canvas>
+                <p id="scoreDisplay" class="scoreDisplay"></p>
+                <div class="menuContainer">
+                    <div id="menu" class="highscore">
+                        <p id="scoreHigh"></p>
+                        <button id="restart" class="restartButton">Restart</button>
+                    </div>
+                </div>
+                <div id="controller" class="controller">
+                    <button id="up" class="arrow-up control-button">UP</button>
+                    <button id="right" class="arrow-right control-button">RIGHT</button>
+                    <button id="left" class="arrow-left control-button">LEFT</button>
+                    <button id="down" class="arrow-down control-button">DOWN</button>
+                </div>
+    </div>
+    <script src="game.js" type="module"></script>
+    <script src="gameClasses.js" type="module"></script>
+</body>
+</html>
