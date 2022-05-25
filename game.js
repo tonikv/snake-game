@@ -106,7 +106,7 @@ function gameLoop(newtime) {
 
         }
     } else {
-        highscoreElem.innerText = (`You'r score was: ${SnakeGame.score}!`);
+        highscoreElem.innerText = (`You're score was: ${SnakeGame.score}`);
         menuElem.classList.add ("animate");
         SnakeGame.endGame();
     }

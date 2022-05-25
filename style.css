@@ -14,8 +14,8 @@ body {
 .container {
     position: relative;
     margin: 0 auto;
-    height: 400px;
-    width: 400px;
+    height: 350px;
+    width: 350px;
 }
 
 .title {
@@ -41,7 +41,7 @@ body {
     font-size: large;
     color: black;
     top: 80px;
-    left: 100px;
+    left: 70px;
     width: 200px;
     position: absolute;
     transition: all 0.2s;
@@ -86,7 +86,7 @@ body {
 .controller {
     background-color: rgb(51, 51, 51);
     place-self: center;
-    grid-auto-rows: minmax(80px, auto);
+    grid-auto-rows: minmax(40px, auto);
     width: 100%;
     display: grid;
     grid-template-areas:
@@ -94,7 +94,7 @@ body {
         'arrowleft . arrowright'
         '. arrowdown .';
     gap: 1px;
-    padding: 25px;
+    padding: 10px 80px 10px 80px;
 }
 
 .animate {
