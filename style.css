@@ -1,17 +1,25 @@
+@font-face {
+    font-family: "Retro";
+    src: url(./fonts/PressStart2P-vaV7.ttf) format("truetype");
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Retro', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans';
 }
+
 
 body {
     overflow: hidden;
-    background-color: black;
+    background-image: linear-gradient(to bottom right, rgb(51, 51, 51), black);
+    background-attachment: fixed;
     color: white;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Retro', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans';
 }
 
-.container {
+.main-container {
     position: relative;
     margin: 0 auto;
     height: 350px;
@@ -20,36 +28,75 @@ body {
 
 .title {
     text-align: center;
+    font-size: xx-large;
+    padding: 5px 0 5px 0;
+    color: white;
+    text-shadow: 4px 4px 4px rgb(0, 0, 0), 0 1em 1em rgb(51, 51, 51), 0 0 0.2em rgb(20, 20, 22);
 }
 
 .viewport {
-    border: 2px white;
     background-color: rgb(51, 51, 51);
     height: 100%;
     width: 100%;
+    box-shadow: 10px 10px 20px 10px black;
 }
 
-.scoreDisplay {
-    font-size: larger;
-    color: black;
+.scores {
     position: absolute;
-    top: 40px;
-    left: 10px;
+    font-size: x-large;
+    height: 100%;
+    width: 100%;
+    top: 70px;
 }
 
-.menuContainer {
-    font-size: large;
-    color: black;
-    top: 80px;
-    left: 70px;
+.touchTEST {
+    position: absolute;
+    font-size: x-large;
+    height: 200px;
+    background-color: blueviolet;
     width: 200px;
+    top: 400px;
+    left: 75px;
+}
+
+.recordScore {
+    padding-left: 10px;
     position: absolute;
-    transition: all 0.2s;
-    opacity: 0%
+    font-size: medium;
+    height: 100%;
+    width: 100%;
+    top: 350px;
+}
+
+.scoreItem {
+    text-align: left;
+    list-style-type: none;
+    font-size: 0.8rem;
+    margin-left: 90px;
+}
+
+
+.scores-title {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.messages {
+    position: absolute;
+    text-align: center;
+    width: 200px;
+    height: 100px;
+    color: black;
+    top: 100px;
+    left: 75px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px black;
 }
 
 .highscore {
-    height: 200px;
+    height: 260px;
     text-align: center;
     display: block;
     color: white;
@@ -62,20 +109,29 @@ body {
     box-shadow: 2px 4px #666;
 }
 
-.arrow-up {
+.arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 100%;
+    box-shadow: 1px 1px 2px 2px black;
+}
+
+.up {
     grid-area: arrowup;
 }
 
-.arrow-down {
-    grid-area: arrowdown;
-}
-
-.arrow-left {
+.left {
     grid-area: arrowleft;
 }
 
-.arrow-right {
+.right {
     grid-area: arrowright;
+}
+
+.down {
+    grid-area: arrowdown;
 }
 
 .active-arrow {
@@ -83,18 +139,25 @@ body {
     box-shadow: none;
 }
 
-.controller {
+.touch {
+    position: absolute;
+    font-size: x-large;
+    height: 150px;
     background-color: rgb(51, 51, 51);
+    box-shadow: 10px 10px 20px 10px black;
+    width: 200px;
+    top: 400px;
+    left: 75px;
     place-self: center;
-    grid-auto-rows: minmax(40px, auto);
-    width: 100%;
+    grid-auto-rows: minmax(30px, auto);
+    place-self: center;
     display: grid;
     grid-template-areas:
         '. arrowup .'
         'arrowleft . arrowright'
         '. arrowdown .';
     gap: 1px;
-    padding: 10px 80px 10px 80px;
+    padding: 10px 10px 10px 10px;
 }
 
 .animate {
@@ -103,9 +166,10 @@ body {
     transition-duration: 2s;
 }
 
-.restartButton {
+.btn-restart {
+    font-family: 'Retro', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: white;
-    margin-left: 10px;
+    margin-left: 30px;
     width: 80%;
     height: 20px;
 }

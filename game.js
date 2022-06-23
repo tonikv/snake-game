@@ -1,115 +1,77 @@
-import { Snake, Food, Game } from "./gameClasses.js"
+import { Controller } from "./controller.js";
+import { Score } from "./score.js";
+import { Snake } from "./snake.js";
+import { Food } from "./food.js";
+import { Highscores } from "./highscores.js";
 
-// Get button elements
-const upArrow = document.querySelector("#up");
-const rightArrow = document.querySelector("#right");
-const leftArrow = document.querySelector("#left");
-const downArrow = document.querySelector("#down");
-const restartButton = document.querySelector("#restart");
-
-// Add eventlisteners
-
-// Restart
-restartButton.addEventListener('click', () => {
-    initialConditions();
-})
-
-// Arrows for movement
-upArrow.addEventListener('click', arrowButtonPressed);
-rightArrow.addEventListener('click', arrowButtonPressed);
-leftArrow.addEventListener('click', arrowButtonPressed);
-downArrow.addEventListener('click', arrowButtonPressed);
-
-let controller = [0,0];
-
-function arrowButtonPressed(event) {
-    switch (event.target.id) {
-        case ("up"):
-            controller = [0, -10];
-            upArrow.classList.add("active-arrow");
-            rightArrow.classList.remove("active-arrow");
-            leftArrow.classList.remove("active-arrow");
-            downArrow.classList.remove("active-arrow");
-            break;
-        case ("right"):
-            controller = [10, 0];
-            upArrow.classList.remove("active-arrow");
-            rightArrow.classList.add("active-arrow");
-            leftArrow.classList.remove("active-arrow");
-            downArrow.classList.remove("active-arrow");
-            break;
-        case ("left"):
-            controller = [-10, 0];
-            upArrow.classList.remove("active-arrow");
-            rightArrow.classList.remove("active-arrow");
-            leftArrow.classList.add("active-arrow");
-            downArrow.classList.remove("active-arrow");
-            break;
-        case ("down"):
-            controller = [0, 10];
-            upArrow.classList.remove("active-arrow");
-            rightArrow.classList.remove("active-arrow");
-            leftArrow.classList.remove("active-arrow");
-            downArrow.classList.add("active-arrow");
-            break;
+class Game {
+    constructor(speed, canvas) {
+        this.score = new Score(10);
+        this.snake = new Snake();
+        this.food = new Food();
+        this.controller = new Controller(speed);
+        this.highscores = new Highscores();
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.ctx.font = "20px Retro";
+        this.ctx.textAlign = "center";
+        this.speed = speed;
+        this.isAlive = true;
+        this.running = true;
     }
-    SnakeGame.setMovement(controller);
-}
+
+    reset() {
+        this.score = new Score(10);
+        this.snake = new Snake();
+        this.food = new Food();
+        this.isAlive = true;
+        this.running = true;
+        this.controller.setDirection([0, 0]);
+    }
 
 
+    endGame() {
+        //this.ctx.fillStyle = 'black';
+        //this.ctx.fillRect(0, 0, 400, 400);
+        console.log("Game ended");
+    }
 
+    render() {
+        this.ctx.clearRect(0, 0, 400, 400);
+        this.snake.draw(this.ctx);
+        this.food.draw(this.ctx);
 
-// Get display elements
-const endGameElem = document.querySelector("#menu");
-const menuElem = document.querySelector(".menuContainer");
-const scoreElem = document.querySelector("#scoreDisplay");
-const highscoreElem = document.querySelector("#scoreHigh");
+        // Score
+        this.ctx.fillStyle = "yellow";
+        this.ctx.fillText(`${this.score.getScore()}`, 320, 30);
+    }
 
-
-const canvas = document.querySelector("#canvas");
-canvas.width = 400;
-canvas.height = 400;
-
-const speed = 10;
-const animationSpeed = 15;
-let SnakeGame;
-let fps, fpsInterval, startTime, now, then, elapsed;
-
-function initialConditions() {
-    SnakeGame = new Game(speed, controller, new Snake(100, 100), new Food(), canvas, scoreElem);
-    SnakeGame.createEvents();
-    scoreElem.innerText = (`SCORE: ${SnakeGame.score}`);
-    menuElem.classList.remove ("animate");
-    startGame(animationSpeed);
-}
-
-
-function startGame(fps) {
-    fpsInterval = 1000 / fps;
-    then = window.performance.now();
-    startTime = then;
-    gameLoop();
-}
-
-function gameLoop(newtime) {
-    if (SnakeGame.isAlive) {
-        requestAnimationFrame(gameLoop);
-
-        now = newtime;
-        elapsed = now - then;
-
-        if (elapsed > fpsInterval) {
-            then = now - (elapsed % fpsInterval);
-            SnakeGame.move(controller);
-            SnakeGame.update();
-            SnakeGame.render();
-
+    update() {
+        // Check if food is collected
+        if (this.snake.x === this.food.x && this.snake.y === this.food.y) {
+            this.snake.grow();
+            this.score.addScore();
+            this.food = new Food();
+            return;
         }
-    } else {
-        highscoreElem.innerText = (`You're score was: ${SnakeGame.score}`);
-        menuElem.classList.add ("animate");
-        SnakeGame.endGame();
+
+        // Check collision of walls
+        if (this.snake.x > this.canvas.width || this.snake.x < 0) {
+            this.isAlive = false;
+        }
+
+        if (this.snake.y > this.canvas.height || this.snake.y < 0) {
+            this.isAlive = false;
+        }
+
+        if (this.snake.checkBodyCollision()) {
+            this.isAlive = false;
+        }
+    }
+
+    move() {
+        this.snake.move(this.controller.getDirection());
     }
 }
 
-initialConditions();
+export { Game };
