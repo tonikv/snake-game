@@ -57,9 +57,9 @@ function handleTouchStart(e) {
 const speed = 10;
 const animationSpeed = 10;
 
-const getURI = "http://localhost:3000/api/all";
-const storeURI = "http://localhost:3000/api/store";
-const deleteURI = "http://localhost:3000/api/delete";
+const getURI = "https://snake-highscore.herokuapp.com//api/all";
+const storeURI = "https://snake-highscore.herokuapp.com//api/store";
+const deleteURI = "https://snake-highscore.herokuapp.com//api/delete";
 
 const scoresData = {
     local: [],
