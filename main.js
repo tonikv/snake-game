@@ -229,9 +229,7 @@ function gameEndCheck() {
 
     if (playtime < 5) {
         setMessage("Oddly fast record! Cannot record", 1500);
-        clearHighscores();
-        generateHighscores(scoresData.online);
-        recordScoreFormElement.style.display = "none"
+        scoresShowElement.style.display = "block";
         return;
     }
 
