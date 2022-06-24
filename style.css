@@ -49,16 +49,6 @@ body {
     top: 70px;
 }
 
-.touchTEST {
-    position: absolute;
-    font-size: x-large;
-    height: 200px;
-    background-color: blueviolet;
-    width: 200px;
-    top: 400px;
-    left: 75px;
-}
-
 .recordScore {
     padding-left: 10px;
     position: absolute;
@@ -80,26 +70,33 @@ body {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
+    color: white;
 }
 
 .messages {
-    position: absolute;
     text-align: center;
-    width: 200px;
-    height: 100px;
-    color: black;
-    top: 100px;
+    position: absolute;
+    font-size: small;
+    margin: 0 auto;
+    padding: 5px 5px 5px 5px;
+    max-width: 200px;
+    min-width: 190px;
+    min-height: 100px;
+    color: white;
+    top: 200px;
     left: 75px;
-    background-color: white;
-    border-radius: 5px;
+    background-color: black;
+    opacity: 90%;
+    border-radius: 2px;
     box-shadow: 2px 2px 2px black;
+    z-index: 2;
 }
 
 .highscore {
     height: 260px;
     text-align: center;
     display: block;
-    color: white;
+    color: black;
     background-color: rgb(51, 51, 51);
 }
 
@@ -140,8 +137,10 @@ body {
 }
 
 .touch {
+    border-radius: 10px;
     position: absolute;
     font-size: x-large;
+    color: yellow;
     height: 150px;
     background-color: rgb(51, 51, 51);
     box-shadow: 10px 10px 20px 10px black;
@@ -158,12 +157,6 @@ body {
         '. arrowdown .';
     gap: 1px;
     padding: 10px 10px 10px 10px;
-}
-
-.animate {
-    opacity: 100%;
-    transition-property: opacity;
-    transition-duration: 2s;
 }
 
 .btn-restart {

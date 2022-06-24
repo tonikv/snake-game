@@ -5,10 +5,11 @@ import { Food } from "./food.js";
 import { Highscores } from "./highscores.js";
 
 class Game {
-    constructor(speed, canvas) {
+    constructor(speed, canvas, gameSpeed) {
         this.score = new Score(10);
         this.snake = new Snake();
         this.food = new Food();
+        this.gameSpeed = gameSpeed;
         this.controller = new Controller(speed);
         this.highscores = new Highscores();
         this.canvas = canvas;
@@ -16,14 +17,26 @@ class Game {
         this.ctx.font = "20px Retro";
         this.ctx.textAlign = "center";
         this.speed = speed;
+        this.makeItHarder = false;
         this.isAlive = true;
         this.running = true;
+    }
+
+    setGameSpeed(multiplyer) {
+        this.gameSpeed = this.gameSpeed * multiplyer;
+        return this.gameSpeed;
+    }
+
+    getGameSpeed() {
+        return this.gameSpeed;
     }
 
     reset() {
         this.score = new Score(10);
         this.snake = new Snake();
         this.food = new Food();
+        this.makeItHarder = false;
+        this.gameSpeed = 10;
         this.isAlive = true;
         this.running = true;
         this.controller.setDirection([0, 0]);
@@ -43,7 +56,7 @@ class Game {
 
         // Score
         this.ctx.fillStyle = "yellow";
-        this.ctx.fillText(`${this.score.getScore()}`, 320, 30);
+        this.ctx.fillText(`${this.score.getScore()}`, 30, 30);
     }
 
     update() {
@@ -51,6 +64,7 @@ class Game {
         if (this.snake.x === this.food.x && this.snake.y === this.food.y) {
             this.snake.grow();
             this.score.addScore();
+            this.makeItHarder = true;
             this.food = new Food();
             return;
         }

@@ -1,15 +1,23 @@
 class Score {
     constructor(pointValue) {
-        this._score = 0;
-        this._value = pointValue;
+        this.score = 0;
+        this.value = pointValue;
+    }
+
+    incValue() {
+        this.value = this.value + 10;
+    }
+
+    getValue() {
+        return this.value;
     }
 
     getScore() {
-        return this._score;
+        return this.score;
     }
 
     addScore() {
-        this._score += this._value;
+        this.score += this.value;
     }
 }
 

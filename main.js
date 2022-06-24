@@ -1,11 +1,5 @@
 import { Game } from "./game.js";
 
-// Get button elements
-const upArrow = document.querySelector("#up");
-const rightArrow = document.querySelector("#right");
-const leftArrow = document.querySelector("#left");
-const downArrow = document.querySelector("#down");
-
 // Canvas
 const canvas = document.querySelector("#gameCanvas");
 canvas.width = 350;
@@ -19,47 +13,10 @@ const highscoreItems = document.querySelector("#scoreList");
 const btnRestart = document.querySelector("#restartButton");
 const touchElement = document.querySelector("#touch");
 
-// Hide elements that are not required in start
-recordScoreFormElement.style.display = "none";
-scoresShowElement.style.display = "none";
-showMessagesElement.style.display = "none";
-
-
-// Event listeners
-btnRestart.addEventListener('click', gameRestart);
-recordScoreFormElement.addEventListener('submit', recordScore);
-touchElement.addEventListener('touchstart', handleTouchStart, { passive: true});
-
-function handleTouchStart(e) {
-    const direction = e.path[0].dataset.direction;
-    switch (direction) {
-        case "up": {
-            SnakeGame.controller.setDirection([0, -speed]);
-            break;
-        }
-        case "down": {
-            SnakeGame.controller.setDirection([0, speed]);
-            break;
-        }
-        case "right": {
-            SnakeGame.controller.setDirection([speed, 0]);
-            break;
-        }
-        case "left": {
-            SnakeGame.controller.setDirection([-speed, 0]);
-            break;
-        }
-            
-    }
-
-}
-
-const speed = 10;
-const animationSpeed = 10;
-
-const getURI = "https://snake-highscore.herokuapp.com//api/all";
-const storeURI = "https://snake-highscore.herokuapp.com//api/store";
-const deleteURI = "https://snake-highscore.herokuapp.com//api/delete";
+// Variables
+const getURI = "https://snake-highscore.herokuapp.com/api/all";
+const storeURI = "https://snake-highscore.herokuapp.com/api/store";
+const deleteURI = "https://snake-highscore.herokuapp.com/api/delete";
 
 const scoresData = {
     local: [],
@@ -67,7 +24,53 @@ const scoresData = {
     isOnline: false
 }
 
-const getScoresData = async () => {
+const snakemove = 10;
+const gameSpeed = 10;
+const guide = "Welcome To Snake! Guide snake with arrow keys or touch controls below game screen. Game starts when you push button"
+const SnakeGame = new Game(snakemove, canvas, gameSpeed);
+SnakeGame.controller.keyboardController();
+let fps, fpsInterval, startTime, now, then, elapsed;
+
+// Hide elements that are not required in start
+recordScoreFormElement.style.display = "none";
+scoresShowElement.style.display = "none";
+showMessagesElement.style.display = "none";
+
+// Event listeners
+btnRestart.addEventListener('click', gameRestart);
+recordScoreFormElement.addEventListener('submit', recordScore);
+touchElement.addEventListener('touchstart', handleTouchStart, { passive: true });
+
+function handleTouchStart(e) {
+    const direction = e.path[0].dataset.direction;
+    switch (direction) {
+        case "up": {
+            SnakeGame.controller.setDirection([0, -snakemove]);
+            break;
+        }
+        case "down": {
+            SnakeGame.controller.setDirection([0, snakemove]);
+            break;
+        }
+        case "right": {
+            SnakeGame.controller.setDirection([snakemove, 0]);
+            break;
+        }
+        case "left": {
+            SnakeGame.controller.setDirection([-snakemove, 0]);
+            break;
+        }
+            
+    }
+
+}
+
+// Start game loop execution
+startGame(SnakeGame.getGameSpeed());
+
+
+// Data handling
+async function getScoresData() {
     const response = await fetch(getURI);
 
     if (response.ok) {
@@ -89,7 +92,6 @@ const deleteScoreData = async () => {
 
     if (response.ok) {
         const data = await response.json();
-        console.table(data);
     } else {
         console.log("error on delete");
     }
@@ -137,7 +139,6 @@ function removeLowestScore() {
             index = i;
         }
     }
-
     scoresData.online.splice(index, 1);
 }
 
@@ -156,8 +157,7 @@ async function recordScore(e) {
     if (scoresData.online.length > 10) {
         removeLowestScore()
         const deleteOne = deleteScoreData();
-        const deleteScore = await deleteOne;
-        console.log(deleteScore);
+        await deleteOne;
     }
 
     clearHighscores();
@@ -166,14 +166,9 @@ async function recordScore(e) {
     recordScoreFormElement.style.display = "none"
 }
 
-const SnakeGame = new Game(speed, canvas);
-SnakeGame.controller.keyboardController();
-let fps, fpsInterval, startTime, now, then, elapsed;
-
-startGame(animationSpeed);
-
-function startGame(fps) {
-    fpsInterval = 1000 / fps;
+function startGame(gameSpeed) {
+    setMessage(guide, 3000);
+    fpsInterval = 1000 / gameSpeed;
     then = window.performance.now();
     startTime = then;
     getScoresData();
@@ -183,6 +178,9 @@ function startGame(fps) {
 function gameRestart() {
     scoresShowElement.style.display = "none";
     recordScoreFormElement.style.display = "none";
+    fpsInterval = 1000 / gameSpeed;
+    then = window.performance.now();
+    startTime = then;
     SnakeGame.reset(); 
     clearHighscores();
     gameLoop();
@@ -194,17 +192,27 @@ function gameLoop(newtime) {
         now = newtime;
         elapsed = now - then;
 
+
         if (SnakeGame.isAlive === false) {
             SnakeGame.running = false;
             gameEndCheck();
         }
 
         if (elapsed > fpsInterval) {
-                then = now - (elapsed % fpsInterval);
-                SnakeGame.move();
-                SnakeGame.update();
-                SnakeGame.render();
-        }        
+            then = now - (elapsed % fpsInterval);
+            SnakeGame.move();
+            SnakeGame.update();
+            SnakeGame.render();
+        }
+
+        const currentScore = SnakeGame.score.getScore();
+        if (currentScore !== 0) {
+            if (SnakeGame.makeItHarder && currentScore % 100 === 0) {
+                setMessage("FASTER", 300);
+                SnakeGame.makeItHarder = false;
+                fpsInterval = 1000 / SnakeGame.setGameSpeed(1.2);
+            }
+        }
     }
 }
 
@@ -220,7 +228,7 @@ function gameEndCheck() {
 
     // Record score always if there is under 10 scores on list.
     if (scoresData.online.length < 10) {
-        setMessage("You made it to TOP TEN!", 1000);
+        setMessage("You made it to TOP TEN!", 1500);
         scoresShowElement.style.display = "block";
         recordScoreFormElement.style.display = "block";
     }
@@ -228,10 +236,12 @@ function gameEndCheck() {
     if (scoresData.online.length >= 10) {
         const scoreToBeat = scoresData.online[scoresData.online.length - 1].score;
         if (SnakeGame.score.getScore() > scoreToBeat) {
-            setMessage("You made it to TOP TEN!", 1000);
+            setMessage("You made it to TOP TEN!", 1500);
             scoresShowElement.style.display = "block";
             recordScoreFormElement.style.display = "block";
-        } 
+        } else {
+            setMessage("Game Over!", 1500);
+        }
     }
 
     // Did not get highscore. Only show highscore list.
