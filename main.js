@@ -227,7 +227,7 @@ function gameEndCheck() {
         return;
     }
 
-    if (playtime < 5) {
+    if (playtime < 200) {
         setMessage("Oddly fast record! Cannot record", 1500);
         scoresShowElement.style.display = "block";
         return;
@@ -266,14 +266,16 @@ function generateHighscores(scores) {
     const sorted = scores.sort((a, b) => b.score - a.score);
 
     sorted.forEach((scoreItem, index) => {
-        let zeroElement = "0"
-        if (index >= 9) {
-            zeroElement = ""
+        if (index <= 9) { 
+            let zeroElement = "0"
+            if (index === 9) {
+                zeroElement = ""
+            }
+            const li = document.createElement('li');
+            li.classList.add("scoreItem");
+            li.innerText = `${zeroElement}${index + 1}. ${scoreItem.name} : ${scoreItem.score}`
+            highscoreItems.appendChild(li);
         }
-        const li = document.createElement('li');
-        li.classList.add("scoreItem");
-        li.innerText = `${zeroElement}${index + 1}. ${scoreItem.name} : ${scoreItem.score}`
-        highscoreItems.appendChild(li);
     });
 }
 
