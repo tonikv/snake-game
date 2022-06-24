@@ -39,7 +39,8 @@ showMessagesElement.style.display = "none";
 // Event listeners
 btnRestart.addEventListener('click', gameRestart);
 recordScoreFormElement.addEventListener('submit', recordScore);
-touchElement.addEventListener('touchstart', handleTouchStart, { passive: true });
+//touchElement.addEventListener('touchstart', handleTouchStart);
+touchElement.addEventListener('click', handleTouchStart);
 
 function handleTouchStart(e) {
     const direction = e.path[0].dataset.direction;
@@ -59,10 +60,8 @@ function handleTouchStart(e) {
         case "left": {
             SnakeGame.controller.setDirection([-snakemove, 0]);
             break;
-        }
-            
+        }    
     }
-
 }
 
 // Start game loop execution
