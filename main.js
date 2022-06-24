@@ -24,6 +24,7 @@ const scoresData = {
     isOnline: false
 }
 
+let playtime = 0;
 const snakemove = 10;
 const gameSpeed = 10;
 const guide = "Welcome To Snake! Guide snake with arrow keys or touch controls below game screen. Game starts when you push button"
@@ -146,7 +147,7 @@ async function recordScore(e) {
 
     const recordObj = {
         name: e.target.name.value,
-        score: SnakeGame.score.getScore()
+        score: SnakeGame.score.getScore(),
     }
 
     const storedScore = await postScoreData(recordObj);
@@ -171,6 +172,7 @@ function startGame(gameSpeed) {
     then = window.performance.now();
     startTime = then;
     getScoresData();
+    playtime = 0;
     gameLoop();
 }
 
@@ -180,6 +182,7 @@ function gameRestart() {
     fpsInterval = 1000 / gameSpeed;
     then = window.performance.now();
     startTime = then;
+    playtime = 0;
     SnakeGame.reset(); 
     clearHighscores();
     gameLoop();
@@ -190,7 +193,7 @@ function gameLoop(newtime) {
         requestAnimationFrame(gameLoop);
         now = newtime;
         elapsed = now - then;
-
+        playtime++;
 
         if (SnakeGame.isAlive === false) {
             SnakeGame.running = false;
@@ -223,6 +226,16 @@ function gameEndCheck() {
         scoresShowElement.style.display = "block";
         return;
     }
+
+    if (playtime < 5) {
+        setMessage("Oddly fast record! Cannot record", 1500);
+        clearHighscores();
+        generateHighscores(scoresData.online);
+        recordScoreFormElement.style.display = "none"
+        return;
+    }
+
+
     generateHighscores(scoresData.online);
 
     // Record score always if there is under 10 scores on list.
