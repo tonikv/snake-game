@@ -14,7 +14,7 @@ const btnRestart = document.querySelector("#restartButton");
 const touchElement = document.querySelector("#touch");
 
 // Variables
-const BASEURL = "https://snake-highscore.onrender.com/"
+const BASEURL = "https://snake-highscore.onrender.com"
 const getURI = `${BASEURL}/api/all`;
 const storeURI = `${BASEURL}/api/store`;
 const deleteURI = `${BASEURL}/api/delete`;
