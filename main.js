@@ -2,10 +2,10 @@ import { Game } from "./game.js";
 
 // Canvas
 const canvas = document.querySelector("#gameCanvas");
-canvas.width = 350;
-canvas.height = 350;
+canvas.width = 300;
+canvas.height = 300;
 
-// Ui elements for highscore list, score, restart button and form 
+// Ui elements for highscore list, score, restart button and form
 const scoresShowElement = document.querySelector("#scores");
 const showMessagesElement = document.querySelector("#messages");
 const recordScoreFormElement = document.querySelector("#formScore");
@@ -14,9 +14,10 @@ const btnRestart = document.querySelector("#restartButton");
 const touchElement = document.querySelector("#touch");
 
 // Variables
-const getURI = "https://snake-highscore.herokuapp.com/api/all";
-const storeURI = "https://snake-highscore.herokuapp.com/api/store";
-const deleteURI = "https://snake-highscore.herokuapp.com/api/delete";
+const BASEURL = "https://snake-highscore.onrender.com/"
+const getURI = `${BASEURL}/api/all`;
+const storeURI = `${BASEURL}/api/store`;
+const deleteURI = `${BASEURL}/api/delete`;
 
 const scoresData = {
     local: [],
@@ -61,7 +62,7 @@ function handleTouchStart(e) {
         case "left": {
             SnakeGame.controller.setDirection([-snakemove, 0]);
             break;
-        }    
+        }
     }
 }
 
@@ -75,7 +76,7 @@ async function getScoresData() {
 
     if (response.ok) {
         const data = await response.json();
-        scoresData.online.push(...data); 
+        scoresData.online.push(...data);
         scoresData.isOnline = true;
     } else {
         //Todo
@@ -100,18 +101,18 @@ const deleteScoreData = async () => {
 
 const postScoreData = async (recordObj) => {
     const response = await fetch(storeURI, {
-    method: 'POST', 
-    mode: 'cors', 
-    cache: 'no-cache', 
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json'
     },
-    redirect: 'follow', 
-    referrerPolicy: 'no-referrer', 
-    body: JSON.stringify(recordObj) 
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(recordObj)
     });
-    
+
     if (response.ok) {
         const data = await response.json()
         return data
@@ -153,7 +154,7 @@ async function recordScore(e) {
     const storedScore = await postScoreData(recordObj);
     const data = storedScore;
     scoresData.online.push(data);
-    
+
     if (scoresData.online.length > 10) {
         removeLowestScore()
         const deleteOne = deleteScoreData();
@@ -183,7 +184,7 @@ function gameRestart() {
     then = window.performance.now();
     startTime = then;
     playtime = 0;
-    SnakeGame.reset(); 
+    SnakeGame.reset();
     clearHighscores();
     gameLoop();
 }
@@ -266,7 +267,7 @@ function generateHighscores(scores) {
     const sorted = scores.sort((a, b) => b.score - a.score);
 
     sorted.forEach((scoreItem, index) => {
-        if (index <= 9) { 
+        if (index <= 9) {
             let zeroElement = "0"
             if (index === 9) {
                 zeroElement = ""
